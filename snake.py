@@ -25,8 +25,9 @@ class Snake(pygame.sprite.Sprite):
     
     def direction(self, direction):
         opposite = (-self._direction[0], -self._direction[1])
-        if opposite != direction:
-            self._direction = direction
+        if direction != opposite:
+            self._direction = direction 
+
 
     def is_out_of_bounds(self):
         head_x, head_y = self._body[0]
@@ -36,4 +37,8 @@ class Snake(pygame.sprite.Sprite):
             or head_y < 0
             or head_y > WINDOW_HEIGHT
         )
+
+    def has_collided_with_itself(self):
+        head = self._body[0]
+        return head in self._body[1:]
 
