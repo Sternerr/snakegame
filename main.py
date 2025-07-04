@@ -3,53 +3,56 @@ from constants import *
 from snake import Snake
 from board import Board
 
-def main():
-    pygame.init()
-    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+class Game:
+    def __init__(self):
+        pygame.init()
+        self._screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+        self._clock = pygame.time.Clock()
+        self._board = Board()
+        self._snake = Snake()
+        self._running = False
 
-    clock = pygame.time.Clock()
-    last_move_time = pygame.time.get_ticks()
-    
-
-    board = Board()
-    snake = Snake()
-
-    while True:
-        if snake.is_out_of_bounds():
-            pygame.QUIT()
-            
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+    def start(self):
+        last_move_time = pygame.time.get_ticks()
+        while True:
+            if self._snake.is_out_of_bounds():
                 pygame.QUIT()
+                
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.QUIT()
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    snake.direction((0, -BOX_SIZE))
-                elif event.key == pygame.K_DOWN:
-                    snake.direction((0, BOX_SIZE))
-                elif event.key == pygame.K_LEFT:
-                    snake.direction((-BOX_SIZE, 0))
-                elif event.key == pygame.K_RIGHT:
-                    snake.direction((BOX_SIZE, 0))
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_UP:
+                        self._snake.direction((0, -BOX_SIZE))
+                    elif event.key == pygame.K_DOWN:
+                        self._snake.direction((0, BOX_SIZE))
+                    elif event.key == pygame.K_LEFT:
+                        self._snake.direction((-BOX_SIZE, 0))
+                    elif event.key == pygame.K_RIGHT:
+                        self._snake.direction((BOX_SIZE, 0))
 
-        screen.fill((0,0,0))
-        board.draw_grid(screen)
+            self._screen.fill((0,0,0))
+            self._board.draw_grid(self._screen)
 
-        snake.draw(screen)
-    
-        current_time = pygame.time.get_ticks()
-        if current_time - last_move_time >= MOVE_INTERVAL:
-            snake.move()
-            last_move_time = current_time
+            self._snake.draw(self._screen)
         
-        pygame.display.flip()
+            current_time = pygame.time.get_ticks()
+            if current_time - last_move_time >= MOVE_INTERVAL:
+                self._snake.move()
+                last_move_time = current_time
+            
+            pygame.display.flip()
 
-        clock.tick(60)
+            self._clock.tick(60)
 
 
 
+
+def main():
+    game = Game()
+    game.start()
 
 
 if __name__ == "__main__":
     main()
-
