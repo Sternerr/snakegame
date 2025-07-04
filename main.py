@@ -51,11 +51,6 @@ class Game:
                     elif event.key == pygame.K_RIGHT:
                         self._snake.direction((BOX_SIZE, 0))
 
-            self._screen.fill((0,0,0))
-            self._board.draw_grid(self._screen)
-
-            self._snake.draw(self._screen)
-            self._food.draw(self._screen)
         
             current_time = pygame.time.get_ticks()
             if current_time - last_move_time >= MOVE_INTERVAL:
@@ -69,13 +64,22 @@ class Game:
                 self._snake.grow()
                 self._food = Food()
 
-            pygame.display.flip()
+            self._draw()
 
             self._clock.tick(60)
 
     def _reset(self):
         self._snake = Snake()
         self._food = Food()
+
+    def _draw(self):
+        self._screen.fill((0,0,0))
+        self._board.draw_grid(self._screen)
+
+        self._snake.draw(self._screen)
+        self._food.draw(self._screen)
+        pygame.display.flip()
+
 
 
 
