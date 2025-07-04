@@ -3,13 +3,13 @@ from constants import *
 
 class Snake(pygame.sprite.Sprite):
     def __init__(self):
-        self._body = [(400, 400), (400, 450), (450, 500)]
+        self._body = [(400, 400), (400, 450), (400, 500)]
         self._direction = (0, 0)
 
     def draw(self, screen):
         for cell in self._body:
             rect = pygame.Rect(*cell, BOX_SIZE, BOX_SIZE)
-            pygame.draw.rect(screen, (255, 255, 255), rect) 
+            pygame.draw.rect(screen, ENGLISH_RED, rect)
 
     def move(self):
         head_x, head_y = self._body[0]
@@ -18,7 +18,6 @@ class Snake(pygame.sprite.Sprite):
         self._body.insert(0, new_head)
     
     def direction(self, direction):
-        
         opposite = (-self._direction[0], -self._direction[1])
         if opposite != direction:
             self._direction = direction

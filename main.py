@@ -16,7 +16,7 @@ class Game:
         last_move_time = pygame.time.get_ticks()
         while True:
             if self._snake.is_out_of_bounds():
-                pygame.QUIT()
+                self._reset()
                 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -46,6 +46,8 @@ class Game:
 
             self._clock.tick(60)
 
+    def _reset(self):
+        self._snake = Snake()
 
 
 
