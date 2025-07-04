@@ -1,7 +1,28 @@
 import pygame
+import random
+
 from constants import *
 from snake import Snake
 from board import Board
+
+class Food:
+    def __init__(self):
+        self._position = self._generate_position()
+
+    def get_position(self):
+        return self._position
+
+    def _generate_position(self):
+        return (
+           random.randrange(0, WINDOW_WIDTH, BOX_SIZE),
+           random.randrange(0, WINDOW_HEIGHT, BOX_SIZE)
+        )
+
+    def draw(self, screen):
+        rect = pygame.Rect(self._position[0], self._position[1], BOX_SIZE, BOX_SIZE)
+        pygame.draw.rect(screen, CHOCOLATE_COSMOS, rect) 
+
+
 
 class Game:
     def __init__(self):
@@ -10,14 +31,12 @@ class Game:
         self._clock = pygame.time.Clock()
         self._board = Board()
         self._snake = Snake()
-        self._running = False
+        self._food = Food()
+        self._running = True
 
     def start(self):
         last_move_time = pygame.time.get_ticks()
-        while True:
-            if self._snake.is_out_of_bounds():
-                self._reset()
-                
+        while self._running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.QUIT()
@@ -36,18 +55,27 @@ class Game:
             self._board.draw_grid(self._screen)
 
             self._snake.draw(self._screen)
+            self._food.draw(self._screen)
         
             current_time = pygame.time.get_ticks()
             if current_time - last_move_time >= MOVE_INTERVAL:
                 self._snake.move()
                 last_move_time = current_time
+           
+            if self._snake.is_out_of_bounds():
+                self._reset()
             
+            if self._snake.get_head() == self._food.get_position():
+                self._snake.grow()
+                self._food = Food()
+
             pygame.display.flip()
 
             self._clock.tick(60)
 
     def _reset(self):
         self._snake = Snake()
+        self._food = Food()
 
 
 

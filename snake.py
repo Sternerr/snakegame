@@ -6,6 +6,9 @@ class Snake(pygame.sprite.Sprite):
         self._body = [(400, 400), (400, 450), (400, 500)]
         self._direction = (0, 0)
 
+    def get_head(self):
+        return self._body[0]
+
     def draw(self, screen):
         for cell in self._body:
             rect = pygame.Rect(*cell, BOX_SIZE, BOX_SIZE)
@@ -16,6 +19,9 @@ class Snake(pygame.sprite.Sprite):
         new_head = (head_x + self._direction[0], head_y + self._direction[1])
         self._body.pop()
         self._body.insert(0, new_head)
+
+    def grow(self):
+        self._body.append(self._body[-1])
     
     def direction(self, direction):
         opposite = (-self._direction[0], -self._direction[1])
